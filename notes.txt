@@ -1,1 +1,2 @@
 These are notes for the un-rport project.
+I made an animated plot for GDP per Capita vs Life expectancy
