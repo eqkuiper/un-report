@@ -1,0 +1,41 @@
+---
+title: "R pratice"
+output: html_notebook
+---
+
+**Plotting in R**
+
+```{r}
+library(tidyverse)
+library(gganimate)
+library(gifski)
+```
+
+```{r}
+#read in csv
+gapminder_1997 <- read_csv("data/gapminder_1997")
+
+#create static plot
+staticPlot <- ggplot(data = gapminder_data) + 
+  aes(x=log(gdpPercap), y=lifeExp, color=continent, size=pop/1000000) + 
+  geom_point(alpha=0.5) + 
+  theme_classic() + 
+  labs(x="GDP per capita", y="Life Expectancy", color="Continent",
+       size ="Popluation (in millions)") 
+
+staticPlot
+```
+
+```{r}
+#animate static plot
+animatedPlot <- staticPlot + 
+  transition_states(year) + 
+  ggtitle("{closest_state}")
+
+animatedPlot
+
+anim_save("animatedPlot.gif",plot=animatedPlot,renderer=gifski_renderer())
+```
+
+
+
