@@ -63,3 +63,12 @@ gapminder_1997 %>%
   filter(continent == "Oceania") %>% 
   kable() # if you want more power: kableExtra
 ```
+
+#### Practice problems
+
+1. **R**  
+2. *ggplot*  
+3. ***more on data cleaning and analysis***  
+4. [Cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)
+
+
