@@ -8,17 +8,33 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(scipen = 987)
 ```
 
 ```{r packages, include=FALSE}
 library(tidyverse)
 library(here)
+library(knitr) #for kable
 ```
 
 This report was prepared to the attention of the UN. It analyzes the relationship between a country's GDP, its life expectancy, and CO2 emissions. Our goal is to determine what to degree a country's economic strength or weakness is determined by its public health and climate status. We hypothesize that both life expectancy and CO2 emissions increase with a country's GDP. 
 
 ```{r data, include=FALSE}
 gapminder_1997 <- read_csv(here("data/gapminder_1997.csv"))
+
+n_countries <- gapminder_1997 %>% 
+  select(country) %>% 
+  n_distinct()
+
+min_gdp <- gapminder_1997 %>% 
+  summarize(min=min(gdpPercap)) %>% 
+  pull(min) %>% 
+  round() 
+
+max_gdp <- gapminder_1997 %>% 
+  summarize(max=max(gdpPercap)) %>% 
+  pull(max) %>% 
+  round()
 ```
 
 ```{r gdp_lifeExp_1997,echo=FALSE}
@@ -30,4 +46,20 @@ gapminder_1997 %>%
        size = "Population (in millions)")
 ```
 
+The above plot shows the relationship between GDP per capita and life expectancy for a total of `r n_countries` countries. For this set of countries, economic wealth ranged from a minimum of USD `r min_gdp` to a maximum of USD `r max_gdp` per capita. 
 
+## Some type of title
+
+We can make tables in R markdown or by using the kable function in the knitter package: 
+
+| Summary of data |
+|----------|----------|
+| Number of countries | `r n_countries`  |
+| Maximum GDP (USD) | `r min_gdp` |
+| Minimum GDP (USD) | `r max_gdp` |
+
+```{r oceania_table, echo=FALSE}
+gapminder_1997 %>% 
+  filter(continent == "Oceania") %>% 
+  kable() # if you want more power: kableExtra
+```
