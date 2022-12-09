@@ -1,0 +1,33 @@
+---
+title: "Writing reports with R markdown"
+author: "Esmée Kuiper"
+date: "2022-12-09"
+output:
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages, include=FALSE}
+library(tidyverse)
+library(here)
+```
+
+This report was prepared to the attention of the UN. It analyzes the relationship between a country's GDP, its life expectancy, and CO2 emissions. Our goal is to determine what to degree a country's economic strength or weakness is determined by its public health and climate status. We hypothesize that both life expectancy and CO2 emissions increase with a country's GDP. 
+
+```{r data, include=FALSE}
+gapminder_1997 <- read_csv(here("data/gapminder_1997.csv"))
+```
+
+```{r gdp_lifeExp_1997,echo=FALSE}
+gapminder_1997 %>% 
+  ggplot(aes(x=gdpPercap, y=lifeExp, color=continent, size=pop/1e6)) +
+  geom_point() +
+  labs(x = "GDP per capita", y = "life expectancy", 
+       title = "Do people in wealthy countries live longer?",
+       size = "Population (in millions)")
+```
+
+
