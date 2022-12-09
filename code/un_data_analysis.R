@@ -114,7 +114,37 @@ gapminder_data %>%
   select(country, continent, year, lifeExp) %>% 
   pivot_wider(names_from = year, values_from = lifeExp)
 
-# . Prepare Americas 2007 gapminder data set
+# . Prepare Americas 2007 gapminder data set ----
 gapminder_data_2007 <- read_csv("data/gapminder_data.csv") %>% 
   filter(year == 2007, continent == "Americas") %>% 
   select(-year, -continent)
+
+# CLEANING DATA ----
+# combine gapminder with co2 emissions
+
+co2_emissions_tidy <- read_csv("data/co2-un-data.csv", skip = 2,
+                                col_names = c("region", "country", "year", 
+                                              "series", "value",
+                                              "footnotes", "source")) %>%
+  # Shorten series variables Emissions (...) and Emissions per capita (...)
+  mutate(series = recode(series,
+                         "Emissions (thousand metric tons of carbon dioxide)" = 
+                           "total_emissions",
+                         "Emissions per capita (metric tons of carbon dioxide)" 
+                         = "per_capita_emissions")) %>%
+  pivot_wider(names_from = series,
+              values_from = value) %>%
+  #count(year)
+  filter(year == 2005) %>%
+  select(-year)
+
+# JOINING DATA FRAMES ----
+inner_join(gapminder_data_2007, co2_emissions_tidy, 
+                                  by = "country")
+
+# .. Exercise: name the type of the country that the University of ----
+# Michigan is in. 
+# shows up as United States or United States of America depending on dataset
+
+# . Using anti_join() to troubleshoot ----
+anti_join(gapminder_data_2007, co2_emissions_tidy, by = "country")
